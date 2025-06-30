@@ -1,0 +1,37 @@
+{
+    "name": "uselytics",
+    "version": "1.0.0",
+    "description": "Invoice Management System",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "tailWatch": "tailwindcss -i ./static/css/global.css -o ./static/css/output.css --watch",
+        "tailBuild": "tailwindcss -i ./static/css/global.css -o ./static/css/output.css --minify"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not op_mini all"
+    ],
+    "postcss": {
+        "plugins": {
+            "tailwindcss": {},
+            "autoprefixer": {}
+        }
+    },
+    "keywords": [
+        "invoice",
+        "django",
+        "npm",
+        "nodejs",
+        "tailwindcss"
+    ],
+    "author": "Moses Borore",
+    "license": "ISC",
+    "dependencies": {
+        "@tailwindcss/cli": "^4.1.11",
+        "tailwindcss": "^4.1.11"
+    },
+    "devDependencies": {
+        "daisyui": "^5.0.43"
+    }
+}
