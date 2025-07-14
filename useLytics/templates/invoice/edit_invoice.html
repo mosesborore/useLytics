@@ -1,0 +1,45 @@
+{% load widget_tweaks %}
+<section id="editForm">
+  <span class="block text-xl font-bold my-1">Edit Invoice</span>
+  <form action="" hx-post="{% url 'invoice:edit_invoice' invoice.id %}" hx-swap="none">
+    {% csrf_token %}
+    <div class="flex items-center gap-8 ">
+      <fieldset class="fieldset flex-1">
+        <legend class="fieldset-legend">Client </legend>
+        {% render_field form.client class="input w-full focus:outline-none" placeholder="Type" %}
+      </fieldset>
+    </div>
+
+    <div class="grid md:grid-cols-2 md:space-x-8">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Date Issued</legend>
+        {% render_field form.date_issued type="date"|attr class="input w-full   focus:outline-none" placeholder="Type" %}
+      </fieldset>
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Due Date</legend>
+        {% render_field form.due_date type="date"|attr class="input w-full focus:outline-none" placeholder="Type" %}
+      </fieldset>
+    </div>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Status</legend>
+      {% render_field form.status class="input w-full focus:outline-none" placeholder="Type" %}
+    </fieldset>
+
+    <div class="w-full">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Notes</legend>
+        {% render_field form.notes class="input w-full focus:outline-none" placeholder="Enter notes, if any" %}
+      </fieldset>
+    </div>
+
+    <div class="flex justify-center">
+      <button class="btn btn-primary my-4">Save Invoice</button>
+    </div>
+  </form>
+
+  <c-toasts></c-toasts>
+
+  <script>
+    // show modal
+    document.getElementById("editDialog").showModal();
+  </script>

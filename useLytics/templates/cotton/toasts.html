@@ -1,0 +1,17 @@
+{% if messages %}
+<script>
+    {% for message in messages %}
+    showToast("{{message|escapejs}}", "{{message.tags|escapejs}}")
+    {% endfor %}
+</script>
+{% endif %}
+{% comment %}
+{% if messages %} {% for message in messages %}
+<div
+    class="alert {% if message.tags == 'info'%} alert-info {% elif message.tags == 'success' %} alert-success {% elif message.tags == 'error' %} alert-error {% endif%}">
+    <span>{{message}}</span>
+    <span>X</span>
+</div>
+{% endfor %}{% endif %}
+</div>
+{% endcomment %}

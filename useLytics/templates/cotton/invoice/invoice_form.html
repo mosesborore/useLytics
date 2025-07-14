@@ -1,0 +1,79 @@
+{% load widget_tweaks %}
+<section id="replaceForm">
+    <div class="flex justify-center">
+        <ul class="steps my-2">
+            <li class="step step-primary text-sm">Create Invoice</li>
+            <li class="step text-sm"> Add Invoice Items</li>
+        </ul>
+    </div>
+    <span class="block text-xl font-bold my-1">Create Invoice</span>
+    <form action="" hx-post="{% url 'invoice:create_invoice' %}" hx-swap="outerHTML" hx-target="#replaceForm">
+        {% csrf_token %}
+        <div class="flex items-center gap-8 ">
+            <fieldset class="fieldset flex-1">
+                <legend class="fieldset-legend">Client </legend>
+                {% render_field form.client class="input w-full focus:outline-none" placeholder="Type" %}
+            </fieldset>
+            <div class="tooltip flex items-center justify-center bg-red-200" data-tip="Create new client">
+                <button class="btn btn-sm" onclick="my_modal_3.showModal()">+</button>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-2 md:space-x-8">
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Date Issued</legend>
+                {% render_field form.date_issued type="date"|attr class="input w-full   focus:outline-none" placeholder="Type" %}
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Due Date</legend>
+                {% render_field form.due_date type="date"|attr class="input w-full focus:outline-none" placeholder="Type" %}
+            </fieldset>
+        </div>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Status</legend>
+            {% render_field form.status class="input w-full focus:outline-none" placeholder="Type" %}
+        </fieldset>
+        <div class="w-full">
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Notes</legend>
+                {% render_field form.notes class="input w-full focus:outline-none" placeholder="Enter notes, if any" %}
+            </fieldset>
+        </div>
+
+        <div class="flex justify-center">
+            <button class="btn btn-primary my-4">Save Invoice</button>
+        </div>
+    </form>
+
+    <dialog id="my_modal_3" class="modal">
+        <div class="modal-box">
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
+            <h3 class="text-lg font-bold">Add Client</h3>
+            <form hx-post="{% url 'invoice:create_client' %}">
+                {% csrf_token %}
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Name</legend>
+                    {% render_field client_form.name class="input w-full focus:outline-none" placeholder="Enter Name" %}
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Phone Number</legend>
+                    {% render_field client_form.phone class="input w-full focus:outline-none" placeholder="Enter Phone" %}
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Address</legend>
+                    {% render_field client_form.address class="input w-full focus:outline-none" placeholder="Enter Address" %}
+                </fieldset>
+
+                <div class="flex justify-center">
+                    <button class="btn btn-primary mt-4">Save Client</button>
+
+                </div>
+
+                </for>
+        </div>
+    </dialog>
+</section>
+
+<c-toasts></c-toasts>

@@ -1,0 +1,102 @@
+{% load widget_tweaks %}
+<c-layouts.base>
+  <!-- head content -->
+  <c-slot name="head_content">
+    <title>Dashboard - UseLytics</title>
+  </c-slot>
+
+  <section class="m-4">
+    <h1 class="text-2xl font-bold">Invoice Dashboard</h1>
+
+    <section class="mt-4 bg-white rounded-lg p-4">
+      <div class="flex items-center justify-center shadow rounded">
+        <div class="stat ">
+          <div class="stat-title">Total Revenue</div>
+          <div class="stat-value">{{stats.total_revenue|floatformat:"2g"}}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Invoices Paid</div>
+          <div class="stat-value">{{stats.paid_invoices}}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Overdue</div>
+          <div class="stat-value">{{stats.overdue}}</div>
+        </div>
+      </div>
+    </section>
+    <section class="mt-4 ">
+      <h2 class="font-semibold">Recent Invoices</h2>
+      <div class="bg-white p-4 mt-4 rounded">
+        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Invoice No.</th>
+                <th>Client</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for invoice in invoices %}
+              <tr>
+                <td>{{invoice.id}}</td>
+                <td>{{invoice.client.name}}</td>
+                <td>{{invoice.line_total|floatformat:"2g"}}</td>
+
+                {% if invoice.status == 'unpaid' %}
+                <td class="badge badge-warning mt-2">{{invoice.status}}</td>
+                {% else %}
+                <td class="badge badge-success mt-2">{{invoice.status}}</td>
+                {% endif %}
+
+                <td class="">
+                  <ul class="flex gap-2">
+                    <li>
+                      <a role="link" aria-roledescription="View details of this invoice" class="link"
+                        href="{% url 'invoice:details' invoice.id %}">View
+                      </a>
+                    </li>
+                    <li>
+                      <button role=" link" aria-roledescription="link to edit this invoice" class="link"
+                        hx-target="#editForm" hx-get="{% url 'invoice:edit_invoice' invoice.id %}">Edit
+                        </q>
+                    </li>
+                    <button role="link" aria-roledescription="link to delete this invoice" class="link"
+                      hx-post="{% url 'invoice:delete' invoice.id %}">Delete</button>
+                  </ul>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-gray-500">No Invoices. <a href="{% url 'invoice:home' %}"
+                    class="link">Create One</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </section>
+
+
+  <dialog id="editDialog" class="modal">
+    <div class="modal-box">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <div id="editForm"></div>
+    </div>
+  </dialog>
+  {% if messages %}
+  <script>
+    {% for message in messages %}
+    showToast("{{ message|escapejs }}", "{{message.tags|escapejs}}") | safe;
+    {% endfor %}
+  </script>
+  {% endif %}
+
+</c-layouts.base>

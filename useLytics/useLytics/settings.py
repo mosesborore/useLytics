@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -6,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-+fn$q6l-*o7iwa!d6h7#-4g79euo55l$(6x)u%7u!3ilqu$)05"
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 print(config("DEBUG", cast=bool))
 
 # Application definition
@@ -22,15 +23,16 @@ INSTALLED_APPS = [
 
 INTERNAL_APPS = [
     "invoice",
+    "account",
 ]
 
 EXTERNAL_APPS = [
     "django_browser_reload",
+    "widget_tweaks",
+    "django_cotton",
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + INTERNAL_APPS + EXTERNAL_APPS
-
-TAILWIND_APP_NAME = "invoice"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -43,11 +45,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "useLytics.urls"
+AUTH_USER_MODEL = "account.User"
+LOGIN_URL = "/accounts/login"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

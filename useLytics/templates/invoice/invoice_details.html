@@ -1,0 +1,52 @@
+<c-layouts.base>
+  <h1 class="mt-4 text-2xl font-bold">
+    Invoice details for #INV: {{invoice.id}} for {{invoice.client.name}}
+  </h1>
+
+  <section class="mt-4 bg-white rounded-lg p-4">
+    <p class="p-4 pb-2 text-sm font-semibold opacity-60 tracking-wide">Items list</p>
+    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+      <table class="table">
+        <thead>
+          <tr>
+
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for item in items %}
+          <tr>
+            <td>{{item.description}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.unit_price}}</td>
+            <td>{{item.total_price}}</td>
+
+            <td class="">
+              <ul class="flex gap-2">
+                <li>
+                  <a role=" link" aria-roledescription="link to edit this invoice" class="link">Edit
+                  </a>
+                </li>
+                <li>
+                  <a href="" role="link" aria-roledescription="link to delete this invoice" class="link">Delete</a>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan=" 5" class="text-center text-gray-500">No Items. <a href="{% url 'invoice:home' %}"
+                class="link">Add some.</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</c-layouts.base>

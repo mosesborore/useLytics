@@ -4,8 +4,8 @@
     "description": "Invoice Management System",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "tailWatch": "tailwindcss -i ./static/css/global.css -o ./static/css/output.css --watch",
-        "tailBuild": "tailwindcss -i ./static/css/global.css -o ./static/css/output.css --minify"
+        "watch:css": "tailwindcss -i ./static/css/global.css -o ./static/css/output.css --watch",
+        "build:css": "tailwindcss -i ./static/css/global.css -o ./static/css/output.css --minify"
     },
     "browserslist": [
         ">0.2%",

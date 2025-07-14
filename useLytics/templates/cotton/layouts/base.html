@@ -1,0 +1,64 @@
+{% load django_browser_reload %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+  <link rel="stylesheet" href="{% static 'fonts/css2.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+
+  {{head_content}}
+  <script src="{% static 'toasts.js' %}"></script>
+  <script src="{% static 'htmx.min.js' %}"></script>
+  <style>
+    * {
+      font-family: "Inter", sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+  <div class="navbar bg-base-100 shadow-sm">
+    <div class="flex-1">
+      <a class="btn btn-ghost text-xl">UseLytics</a>
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <div class="flex-none">
+      <ul class="menu menu-horizontal px-1">
+        <li><a href="{% url 'invoice:dashboard' %}">Dashboard</a></li>
+        <li>
+          <details>
+            <summary>Invoices</summary>
+            <ul class="bg-base-100 rounded-t-none p-2">
+              <li><a href="{% url 'invoice:home' %}">Create</a></li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+
+  </div>
+  <div id="messages">
+    <div class="toast toast-top toast-end z-50" id="toast-container">
+    </div>
+  </div>
+  <main class="container mx-auto">
+    {{slot}}
+    {% block main_content %}
+
+    {% endblock main_content %}
+  </main>
+  <div>{% django_browser_reload_script %}</div>
+
+</body>
+
+</html>

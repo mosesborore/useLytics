@@ -1,0 +1,59 @@
+{% load widget_tweaks %}
+<section id="invoiceFormId">
+  <div class="flex justify-center">
+    <ul class="steps my-2">
+      <li class="step step-primary text-sm">Create Invoice</li>
+      <li class="step step-primary  text-sm"> Add Invoice Items</li>
+    </ul>
+  </div>
+  <div class="flex items-center justify-between w-full">
+    <span class="block text-xl font-bold my-1">Line Items for #INV-{{invoice.id}} - {{invoice.client.name}}</span>
+    <a class="btn btn-sm btn-secondary" href="{% url 'invoice:dashboard' %}"
+      aria-roledescription="go to dashboard">Done</a>
+  </div>
+  <form hx-post="{% url 'invoice:add-items' invoice.id %}" hx-target="#invoiceFormId">
+    {% csrf_token %}
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">{{form_items.description.name|capfirst}}</legend>
+      {% render_field form_items.description class="input w-full focus:outline-none" placeholder="Enter Description" %}
+    </fieldset>
+    <div class="grid md:grid-cols-2 md:space-x-8 ">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">{{form_items.quantity.name|capfirst}}</legend>
+        {% render_field form_items.quantity type="number"|attr step="0.25"|attr min="0"|attr class="input w-full focus:outline-none" placeholder="Enter Quantity" %}
+      </fieldset>
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Unit Price</legend>
+        {% render_field form_items.unit_price type="number"|attr min="0"|attr class="input w-full focus:outline-none" placeholder="Enter Quantity" %}
+      </fieldset>
+    </div>
+    <div class="flex justify-center">
+      <button class="btn btn-primary my-4">Add Item</button>
+    </div>
+  </form>
+
+  <div>
+    <ul class="rounded-box shadow-md" id="items-list">
+      <li class="p-4 pb-2 text-xs font-semibold opacity-60 tracking-wide">Line items</li>
+      {% for item in items %}
+      <li class="flex space-x-4 items-center rounded-box shadow-md p-4 my-2 item-row">
+        <div class="text-4xl font-thin opacity-30 tabular-nums">03</div>
+        <div class="flex-1">
+          <div>{{item.description}}</div>
+          <div Createclass="text-xs uppercase font-semibold opacity-60">{{item.quantity}} <span
+              class="font-normal lowercase">x</span>
+            KES {{item.unit_price|floatformat:"2g"}}</div>
+        </div>
+        <span> {{item.total_price|floatformat:"2g"}}</span>
+      </li>
+      {% empty %}
+      <li class="flex space-x-4 items-center justify-center rounded-box shadow-md p-4 my-2 item-row">
+        <span class="opacity-60"> No Items found.</span>
+      </li>
+      {% endfor %}
+    </ul>
+
+  </div>
+</section>
+
+<c-toasts></c-toasts>

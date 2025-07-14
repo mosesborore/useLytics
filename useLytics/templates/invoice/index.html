@@ -1,3 +1,12 @@
-{% extends '../base.html' %} {% block main_content %}
-<h1 class="p-5 text-2xl font-bolder">Main</h1>
-{% endblock main_content %}
+<c-layouts.base>
+  <c-slot name="head_content">
+    <title>Create Invoice</title>
+  </c-slot>
+  <section class="m-4">
+    <h1 class="text-3xl font-bold">Invoice Dashboard</h1>
+
+    <section class="mt-4 bg-white rounded-lg p-4">
+      <c-invoice.invoice-form :form="form"></c-invoice.invoice-form>
+    </section>
+  </section>
+</c-layouts.base>

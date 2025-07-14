@@ -1,0 +1,31 @@
+{% load widget_tweaks %}
+<c-layouts.base>
+  <section>
+    <div class="bg-white m-8 p-8 shadow rounded max-w-2xl mx-auto ">
+      <div>
+        <h1 class="font-bold mb-8 text-center text-xl">Login to UseLytics</h1>
+        <!-- <p class="my-4 text-sm text-red-500 text-center" id="errors">
+          Wrong credentials. Please confirm your inputs and try again
+        </p> -->
+        <c-toasts></c-toasts>
+        <form action="{% url 'accounts:login' %}" method="post">
+          {% csrf_token %}
+          <fieldset class="fieldset mb-2">
+            <legend class="fieldset-legend">Email</legend>
+            {% render_field form.email class="input w-full focus:outline-none" placeholder="Enter Email" %}
+          </fieldset>
+          <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">Password</legend>
+            {% render_field form.password type="password"|attr class="input w-full focus:outline-none" placeholder="Enter Password" %}
+          </fieldset>
+
+          <div class="flex justify-center">
+            <button class="btn btn-primary" type="submit">
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</c-layouts.base>
