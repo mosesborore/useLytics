@@ -1,7 +1,8 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.http import HttpRequest, HttpResponse
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpRequest
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 
 from .forms import LoginForm
 
@@ -24,6 +25,12 @@ def login_view(request: HttpRequest):
             login(request, user)
             messages.success(request, "Successful login. Welcome")
             return redirect("invoice:home")
-        messages.error(request, "User not found")
+        messages.error(request, "Wrong Credentials. Try again")
 
     return render(request, "account/create_account.html", {"form": form})
+
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    return redirect("accounts:login")

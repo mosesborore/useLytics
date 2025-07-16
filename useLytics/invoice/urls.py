@@ -1,15 +1,7 @@
 from django.urls import path
 
-from .views import (
-    add_invoice_item,
-    create_client,
-    create_invoice,
-    dashboard,
-    delete_invoice,
-    edit_invoice,
-    index,
-    invoice_details,
-)
+from .views import (add_invoice_item, create_client, create_invoice, dashboard,
+                    delete_invoice, edit_invoice, index, invoice_details)
 
 app_name = "invoice"
 
