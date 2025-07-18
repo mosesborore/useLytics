@@ -24,7 +24,7 @@ def login_view(request: HttpRequest):
         if user:
             login(request, user)
             messages.success(request, "Successful login. Welcome")
-            return redirect("invoice:home")
+            return redirect("invoice:dashboard")
         messages.error(request, "Wrong Credentials. Try again")
 
     return render(request, "account/create_account.html", {"form": form})
