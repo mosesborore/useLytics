@@ -1,10 +1,16 @@
 <c-layouts.base>
   <h1 class="mt-4 text-2xl font-bold">
-    Invoice details for #INV: {{invoice.id}} for {{invoice.client.name}}
+    Invoice Details
   </h1>
 
   <section class="mt-4 bg-white rounded-lg p-4">
-    <p class="p-4 pb-2 text-sm font-semibold opacity-60 tracking-wide">Items list</p>
+    <div class="flex justify-start flex-col items-start text-sm mb-8">
+      <p><span class="font-bold">Invoice No:</span> {{invoice.id}}</p>
+      <p class="flex-1"><span class="font-bold">Customer name:</span> {{invoice.client.name|capfirst}}</p>
+      <p class="flex-1"><span class="font-bold ">Date Issued: </span> {{invoice.date_issued}}</p>
+      <p class="flex-1"><span class="font-bold">Due Date:</span> {{invoice.due_date}}</p>
+    </div>
+    <p class="pb-2 text-sm font-semibold opacity-60 tracking-wide">Invoice Lines</p>
     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
       <table class="table">
         <thead>
