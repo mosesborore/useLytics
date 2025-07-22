@@ -3,7 +3,7 @@
 ## How to use it
 
 1. Clone this repo
-    - the project is a folder called useLytics/useLytics
+    - the project is in a folder called useLytics/useLytics
     - How to run the project
     ```bash
         # create virtual environment
