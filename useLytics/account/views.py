@@ -12,6 +12,9 @@ def home_view(request: HttpRequest):
 
 
 def login_view(request: HttpRequest):
+    if request.user.is_authenticated:
+        return redirect("invoice:home")
+
     form = LoginForm()
 
     if request.method == "POST":

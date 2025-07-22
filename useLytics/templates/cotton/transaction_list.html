@@ -1,0 +1,9 @@
+<div class="bg-white p-4 mt-4 rounded">
+  <ul id="transactionList">
+    {% for transaction in transactions %}
+    <c-transaction-item :transaction="transaction"></c-transaction-item>
+    {% empty %}
+    <li class="text-gray-500 text-center">No Transactions Found</li>
+    {% endfor %}
+  </ul>
+</div>

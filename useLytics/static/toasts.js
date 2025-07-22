@@ -14,3 +14,13 @@ function showToast(message, messageLevel) {
         if (toast.parentNode) toast.remove();
     }, 5000); // Auto-dismiss after 5 seconds
 }
+
+
+function removeModalAlert() {
+    // removes the alert shown in the add transaction modal
+    document.querySelector("#modalAlertContainer").remove()
+}
+
+function removeModalAlertTimeout() {
+    setTimeout(() => removeModalAlert(), 3000)
+}

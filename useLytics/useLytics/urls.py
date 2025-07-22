@@ -6,4 +6,5 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path("", include("invoice.urls", namespace="invoice")),
     path("accounts/", include("account.urls", namespace="accounts")),
+    path("tracker/", include("finance_tracker.urls", namespace="tracker")),
 ]
