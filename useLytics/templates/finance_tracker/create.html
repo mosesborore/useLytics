@@ -1,0 +1,39 @@
+{% load widget_tweaks%}
+<c-transaction-item></c-transaction-item>
+
+<div id="modalForm" hx-swap-oob="true">
+  <div class="my-4 transition duration-400 ease-out" id="modalAlertContainer" onclick="removeModalAlert()">
+    <p class="alert alert-success shadow-lg">{{message}}</p>
+  </div>
+  <form class="mt-4 shadow-lg p-3 rounded-lg bg-white" hx-post="{% url 'tracker:create' %}"
+    hx-target="#newTransactionList" hx-swap="afterbegin" hx-indicator="#indicator">
+    {% csrf_token %}
+    <fieldset class="fieldset mb-2">
+      <legend class="fieldset-legend">Description</legend>
+      {% render_field form.description class="input w-full focus:outline-none" placeholder="Enter description" %}
+    </fieldset>
+    <fieldset class="fieldset mb-2">
+      <legend class="fieldset-legend">Amount</legend>
+      {% render_field form.amount min="0"|attr class="input w-full focus:outline-none" placeholder="Enter amount" %}
+    </fieldset>
+    <fieldset class="fieldset mb-2">
+      <legend class="fieldset-legend">Date</legend>
+      {% render_field form.date type="date"|attr class="input w-full focus:outline-none" placeholder="Enter date" %}
+    </fieldset>
+    <fieldset class="fieldset mb-2">
+      <legend class="fieldset-legend">Category</legend>
+      {% render_field form.category class="input w-full focus:outline-none" placeholder="Enter category" %}
+    </fieldset>
+    <fieldset class="fieldset mb-2">
+      <legend class="fieldset-legend">Transaction Type</legend>
+      {% render_field form.type class="input w-full focus:outline-none" placeholder="Enter Transaction Type" %}
+    </fieldset>
+
+    <div class="flex justify-center mt-4">
+      <button class="btn btn-primary">Save Transaction</button>
+    </div>
+  </form>
+  <script type="text/javascript">
+    removeModalAlertTimeout();
+  </script>
+</div>

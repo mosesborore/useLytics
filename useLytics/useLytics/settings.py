@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 INTERNAL_APPS = [
     "invoice",
     "account",
+    "finance_tracker",
 ]
 
 EXTERNAL_APPS = [

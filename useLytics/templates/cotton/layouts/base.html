@@ -29,11 +29,19 @@
     <div class="flex-1">
       <a class="btn btn-ghost text-xl">UseLytics</a>
     </div>
-
     {% if request.user.is_authenticated %}
     <div class="navbar-center">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="{% url 'invoice:dashboard' %}">Dashboard</a></li>
+        <li>
+          <details>
+            <summary>Tracker</summary>
+            <ul class=" bg-base-100 rounded-t-none p-2">
+              <li><a href="{% url 'tracker:home' %}"">Dashboard</a></li>
+              <li><a href=" {% url 'tracker:home' %}"">Create</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href=" {% url 'invoice:dashboard' %}">Dashboard</a></li>
         <li>
           <details>
             <summary>Invoices</summary>
@@ -66,15 +74,14 @@
     {% endif %}
 
   </div>
+
   <div id="messages">
     <div class="toast toast-top toast-end z-50" id="toast-container">
     </div>
   </div>
+
   <main class="container mx-auto">
     {{slot}}
-    {% block main_content %}
-
-    {% endblock main_content %}
   </main>
   <div>{% django_browser_reload_script %}</div>
 

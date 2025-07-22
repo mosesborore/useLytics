@@ -1,0 +1,14 @@
+{% if stats %}
+<div class="flex items-center justify-center shadow rounded stats" id="statsDashboard">
+    <div class="stat bg-red-500 mr-4 rounded-r">
+        <div class="stat-title text-black">Total Expenses</div>
+        <div class="stat-value text-white">
+            {{stats.total_expense|floatformat:"1g"}}
+        </div>
+    </div>
+    <div class="stat bg-green-500 rounded-l">
+        <div class="stat-title text-black">Total Income</div>
+        <div class="stat-value text-white"> {{stats.total_income|floatformat:"1g"}}</div>
+    </div>
+</div>
+{% endif %}

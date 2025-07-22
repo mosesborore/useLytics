@@ -1,0 +1,30 @@
+<c-layouts.fin-base>
+  <c-slot name="head_content">
+    <title>Dashboard | Tracker</title>
+  </c-slot>
+  <section class="m-4">
+    <h1 class="text-2xl font-bold">Welcome, {{"User"}}</h1>
+
+    <section class="mt-4 bg-white rounded-lg p-4" id="statsDashboard">
+      <c-stats></c-stats>
+    </section>
+    <section class="mt-4">
+      <div class="flex justify-between items-center">
+        <h2 class="font-semibold">Recent Transactions</h2>
+
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn btn-sm m-1">Filter by</div>
+          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
+            <li><a hx-get="{% url 'tracker:filter' %}?filter_by=today" hx-target="#transactionList">Today</a></li>
+            <li><a hx-get="{% url 'tracker:filter' %}?filter_by=week" hx-target="#transactionList">Week</a></li>
+            <li><a hx-get="{% url 'tracker:filter' %}?filter_by=month" hx-target="#transactionList">Month</a></li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      <div id="transactionList">
+        <c-transaction-list></c-transaction-list>
+      </div>
+    </section>
+  </section>
+</c-layouts.fin-base>
