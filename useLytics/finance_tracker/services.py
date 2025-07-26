@@ -55,3 +55,25 @@ def get_current_month_transactions():
         Q(date__month=today.month) & Q(date__year=today.year),
     )
     return transactions
+
+
+def get_total_expense_per_category_chart_attributes():
+    """Get the chart attributes (labels and data)"""
+    qs = (
+        Transaction.objects.filter(type="expense")
+        .values("category__name")
+        .annotate(total=Sum("amount"))
+    )
+    labels = []
+    data = []
+
+    for item in qs:
+        labels.append(item.get("category__name"))
+        data.append(item.get("total"))
+
+    return {
+        "total_expense_per_category": {
+            "labels": labels,
+            "data": data,
+        },
+    }
