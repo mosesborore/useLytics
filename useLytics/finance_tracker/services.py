@@ -1,6 +1,6 @@
 from django.db.models import Q, Sum
 from django.utils import timezone
-
+from django.db.models.functions import TruncMonth
 from .models import Transaction
 
 
@@ -49,18 +49,9 @@ def get_current_week_transactions():
 
 def get_current_month_transactions():
     """Gets the current month transactions"""
-    from calendar import monthrange
-
     today = timezone.now().date()
 
-    month = today.month
-    year = today.year
-    end_month_day = monthrange(year, month)[1]
-
-    start_date = timezone.datetime(year, month, 1).date()
-    end_date = timezone.datetime(year, month, end_month_day).date()
-
     transactions = Transaction.objects.filter(
-        Q(date__gte=start_date) & Q(date__lte=end_date),
+        Q(date__month=today.month) & Q(date__year=today.year),
     )
     return transactions
