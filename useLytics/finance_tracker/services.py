@@ -1,6 +1,7 @@
 from django.db.models import Q, Sum
-from django.utils import timezone
 from django.db.models.functions import TruncMonth
+from django.utils import timezone
+
 from .models import Transaction
 
 
@@ -57,7 +58,7 @@ def get_current_month_transactions():
     return transactions
 
 
-def get_total_expense_per_category_chart_attributes():
+def get_total_expense_per_category_chart_data():
     """Get the chart attributes (labels and data)"""
     qs = (
         Transaction.objects.filter(type="expense")
@@ -77,3 +78,86 @@ def get_total_expense_per_category_chart_attributes():
             "data": data,
         },
     }
+
+
+def get_total_income_and_total_expense_data():
+    qs = (
+        Transaction.objects.filter(date__year=timezone.now().year)
+        .annotate(month=TruncMonth("date"))
+        .values("month", "type")
+        .annotate(total=Sum("amount"))
+        .order_by("month")
+    )
+
+    # Prepare data
+    labels = []
+    income_data = []
+    expense_data = []
+
+    months_seen = set()
+
+    for item in qs:
+        month_str = item["month"].strftime("%b")
+        if month_str not in months_seen:
+            labels.append(month_str)
+            months_seen.add(month_str)
+
+        if item["type"] == "income":
+            income_data.append(float(item["total"]))
+        else:
+            expense_data.append(float(item["total"]))
+
+    return {
+        "total_income_and_total_expense": {
+            "labels": labels,
+            "income_data": income_data,
+            "expense_data": expense_data,
+        }
+    }
+
+
+def get_category_total_proportions():
+    qs = (
+        Transaction.objects.filter(
+            date__month=timezone.now().month,
+            date__year=timezone.now().year,
+            type="expense",
+        )
+        .values("category__name")
+        .annotate(total=Sum("amount"))
+        .order_by("-total")
+    )
+    total = (
+        Transaction.objects.filter(
+            date__month=timezone.now().month,
+            date__year=timezone.now().year,
+            type="expense",
+        )
+        .aggregate(total_expense=Sum("amount"))
+        .get("total_expense", 0)
+    )
+
+    if not total:
+        return None
+
+    records = []
+    margin_left_offset = 0
+
+    for idx, category_item in enumerate(qs):
+        margin_left_offset = 0 if idx == 0 else margin_left_offset
+
+        category_total = category_item.get("total", 0)
+        # what proportion does it occupy in the overall `total`
+        proportion = round((category_total / total) * 100)
+
+        records.append(
+            {
+                "name": category_item.get("category__name"),
+                "total": category_total,
+                "proportion": proportion,
+                "margin_offset": margin_left_offset,  # margin-left
+            }
+        )
+        margin_left_offset += proportion
+
+    return records
