@@ -1,0 +1,18 @@
+<div class="bg-white max-w-xl max-md:w-full rounded-lg shadow-lg p-4" id="prog2">
+  <div class="flex flex-col gap-4 w-100 mx-auto">
+    <p class="mx-auto font-bold w-full">Category Proportion Breakdown</p>
+
+    {% for r in pv %}
+    <div>
+      <div class="flex justify-between mb-2">
+        <span>{{r.name}}</span>
+        <span>{{r.total|floatformat:"2g"}}</span>
+      </div>
+      <div class="h-2 bg-slate-400 w-100 rounded">
+        <span class="h-2 block rounded bg-amber-300 w-{{r.proportion}} ml-{{r.margin_offset}}">
+        </span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

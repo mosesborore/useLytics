@@ -28,90 +28,40 @@
 
 <body class="bg-slate-100 min-h-screen" id="body">
 
-  <dialog id="addTransactionModal" class="modal">
-    <div class="modal-box bg-slate-100">
-      <form method="dialog">
-        <a class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" href="{% url 'tracker:home' %}">✕</a>
-      </form>
-      <h3 class="text-lg font-bold">Add Transactions</h3>
-      <div class="my-1 htmx-indicator" id="indicator">
-        <span class="opacity-80">Submitting </span>
-        <span class="loading loading-dots loading-md"></span>
-      </div>
+  <c-add-transaction-modal></c-add-transaction-modal>
 
-      <div id="modalForm">
-        <div class="my-4" id="modalAlertContainer" onclick="removeModalAlert()">
+  <div class="bg-white shadow-sm">
+    <div class="container mx-auto">
+      <div class="navbar">
+        <div class="flex-1">
+          <a class="btn btn-ghost text-xl">NeoSpend</a>
         </div>
-        <form class="mt-4 shadow-lg p-3 rounded-lg bg-white" hx-post="{% url 'tracker:create' %}"
-          hx-target="#newTransactionList" hx-swap="afterbegin" hx-indicator="#indicator">
-          {% csrf_token %}
-          <fieldset class="fieldset mb-2">
-            <legend class="fieldset-legend">Description</legend>
-            {% render_field form.description class="input w-full focus:outline-none" placeholder="Enter description" %}
-          </fieldset>
-          <fieldset class="fieldset mb-2">
-            <legend class="fieldset-legend">Amount</legend>
-            {% render_field form.amount min="0"|attr class="input w-full focus:outline-none" placeholder="Enter amount" %}
-          </fieldset>
-          <fieldset class="fieldset mb-2">
-            <legend class="fieldset-legend">Date</legend>
-            {% render_field form.date type="date"|attr class="input w-full focus:outline-none" placeholder="Enter date" %}
-          </fieldset>
-          <fieldset class="fieldset mb-2">
-            <legend class="fieldset-legend">Category</legend>
-            {% render_field form.category class="input w-full focus:outline-none" placeholder="Enter category" %}
-          </fieldset>
-          <fieldset class="fieldset mb-2">
-            <legend class="fieldset-legend">Transaction Type</legend>
-            {% render_field form.type class="input w-full focus:outline-none" placeholder="Enter Transaction Type" %}
-          </fieldset>
-
-          <div class="flex justify-center mt-4">
-            <button class="btn btn-primary">Save Transaction</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="mt-4 p-4 shadow bg-white rounded-lg">
-        <p class="font-bold">Transactions</p>
-        <ul id="newTransactionList">
-          {% for transaction in transactions %}
-          <c-transaction-item :transaction="None"></c-transaction-item>
-          {% endfor %}
-        </ul>
-
-      </div>
-    </div>
-  </dialog>
-
-
-  <div class="navbar bg-base-100 shadow-sm">
-    <div class="flex-1">
-      <a class="btn btn-ghost text-xl">NeoSpend</a>
-    </div>
-
-    {% if request.user.is_authenticated %}
-    <div class="navbar-center">
-      <ul class="menu menu-horizontal px-1">
-        <li><a href="{% url 'tracker:home' %}"">Dashboard</a></li>
+        {% if request.user.is_authenticated %}
+        <div class="navbar-center">
+          <ul class="menu menu-horizontal px-1">
+            <li><a href="{% url 'tracker:home' %}"">Dashboard</a></li>
         <li><a href=" {% url 'tracker:home' %}"">Transactions</a></li>
-      </ul>
+          </ul>
+        </div>
+        <div class=" navbar-end">
+          <button class="btn btn-primary" onclick="addTransactionModal.showModal()">Add Transaction</button>
+        </div>
+        {% endif %}
+      </div>
     </div>
-    <div class=" navbar-end">
-      <button class="btn btn-primary" onclick="addTransactionModal.showModal()">Add Transaction</button>
-    </div>
-    {% endif %}
-  </div>
-
-  <div id="messages">
-    <div class="toast toast-top toast-end z-50" id="toast-container">
+    <div id="messages">
+      <div class="toast toast-top toast-end z-50" id="toast-container">
+      </div>
     </div>
   </div>
 
   <main class="container mx-auto">
     {{slot}}
   </main>
+  {{scripts}}
+
   <div>{% django_browser_reload_script %}</div>
+
 
   <script type="text/javascript">
     {% for message in messages %}

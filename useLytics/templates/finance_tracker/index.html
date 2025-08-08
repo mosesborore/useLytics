@@ -3,16 +3,21 @@
     <title>Dashboard | Tracker</title>
   </c-slot>
   <section class="m-4">
-    <h1 class="text-2xl font-bold">Welcome, {{"User"}}</h1>
+    <h1 class="text-2xl font-bold">Welcome, {{request.user.name}}</h1>
 
     <section class="mt-4 bg-white rounded-lg p-4" id="statsDashboard">
       <c-stats></c-stats>
     </section>
+
+    <section class="my-8 flex gap-4 max-md:flex-wrap">
+      <c-proportion-skeleton></c-proportion-skeleton>
+    </section>
+
     <section class="mt-4">
       <div class="flex justify-between items-center">
         <h2 class="font-semibold">Recent Transactions</h2>
 
-        <div class="dropdown dropdown-end">
+        <div class="dropdown dropdown-start">
           <div tabindex="0" role="button" class="btn btn-sm m-1">Filter by</div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
             <li><a hx-get="{% url 'tracker:filter' %}?filter_by=today" hx-target="#transactionList">Today</a></li>
@@ -27,4 +32,79 @@
       </div>
     </section>
   </section>
+  <c-slot name="scripts">
+    {{total_expense_per_category|json_script:"total_expense_per_category_data" }}
+    {{total_income_and_total_expense_month|json_script:"total_income_and_total_expense_month_data" }}
+
+
+    <script>
+      let ctx1 = document.getElementById("chart1");
+      let ctx2 = document.getElementById("chart2");
+
+      const totalExpensePerCategoryElement = document.getElementById("total_expense_per_category_data");
+      const totalExpensePerCategory = JSON.parse(totalExpensePerCategoryElement.textContent);
+
+      const totalsElement = document.getElementById("total_income_and_total_expense_month_data");
+      const totalsContent = JSON.parse(totalsElement.textContent);
+
+      let c1 = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: totalsContent['total_income_and_total_expense']['labels'],
+          datasets: [
+            {
+              label: 'income',
+              data: totalsContent['total_income_and_total_expense']['income_data']
+              ,
+              borderColor: 'green',
+              backgroundColor: 'rgba(0, 233, 0, 0.3)',
+              fill: 'true',
+              tension: 0.3,
+              stack: 'total',
+            },
+            {
+              label: 'expense',
+              data: totalsContent['total_income_and_total_expense']['expense_data'],
+              borderColor: 'red',
+              backgroundColor: 'rgba(233, 0, 0, 0.3)',
+              fill: 'true',
+              tension: 0.3,
+              stack: 'total',
+            }
+          ]
+        }
+
+      });
+      let c2 = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+          labels: totalExpensePerCategory['total_expense_per_category']['labels'],
+          datasets:
+            [
+              {
+                label: 'Total Expense',
+                data: totalExpensePerCategory['total_expense_per_category']['data'],
+                options: {
+                  responsive: true,
+                  maintainAspectRation: true,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    title: {
+                      display: true,
+                      text: "Expense per Category",
+                    },
+                  },
+                },
+              },
+
+            ]
+        }
+
+      });
+    </script>
+  </c-slot>
+
+
 </c-layouts.fin-base>

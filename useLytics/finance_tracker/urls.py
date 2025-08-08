@@ -4,6 +4,7 @@ from .views import (
     create_transaction_view,
     delete_transaction_view,
     filtered_transactions_view,
+    get_progress_view,
     home_view,
 )
 
@@ -26,4 +27,5 @@ urlpatterns = [
         name="delete",
     ),
     path("filter/", filtered_transactions_view, name="filter"),
+    path("progress/", get_progress_view, name="progress"),
 ]
