@@ -3,15 +3,18 @@ from django.db.models import Sum
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.utils import timezone
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django_htmx.http import HttpResponseClientRefresh
 
 from .forms import TransactionForm
 from .models import Transaction
 from .services import (
-    get_stats,
-    get_current_week_transactions,
     get_current_month_transactions,
+    get_current_week_transactions,
+    get_category_total_proportions,
+    get_stats,
+    get_total_expense_per_category_chart_data,
+    get_total_income_and_total_expense_data,
 )
 
 template_folder = "finance_tracker"
@@ -19,23 +22,40 @@ template_folder = "finance_tracker"
 
 def home_view(request: HttpRequest):
     transactions = Transaction.objects.all()
+    pv = get_category_total_proportions()
 
     stats = get_stats(transactions)
 
     form = TransactionForm(initial={"date": timezone.now().date()})
+
     context = {
         "form": form,
         "transactions": transactions,
         "stats": stats,
+        "total_expense_per_category": get_total_expense_per_category_chart_data(),
+        "total_income_and_total_expense_month": get_total_income_and_total_expense_data(),
+        "pv": pv,
     }
     return render(request, f"{template_folder}/index.html", context)
+
+
+def get_progress_view(request):
+    pv = get_category_total_proportions()
+
+    return render(
+        request,
+        f"{template_folder}/partials/proportion.html",
+        {
+            "pv": pv,
+        },
+    )
 
 
 @require_POST
 def create_transaction_view(request: HttpRequest):
     """View to create new transaction. Accepts only POST requests"""
     form = TransactionForm(request.POST)
-    print(request.POST)
+
     message = ""
     transaction = None
     if form.is_valid():
@@ -91,6 +111,7 @@ def filtered_transactions_view(request: HttpRequest):
         transactions = get_current_week_transactions()
     elif filter_by == "month":
         transactions = get_current_month_transactions()
+        print(transactions)
     else:
         transactions = Transaction.objects.filter(date=timezone.now().date())
 
